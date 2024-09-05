@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from '../services/employee.service';
+import { EmployeeService } from '../services/employee-service/employee.service';
 import { IEmployee } from '../models/employee.model';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-employee',
@@ -12,7 +14,10 @@ export class AddEmployeeComponent implements OnInit {
   employeeForm!: FormGroup;
   isSaving = false;
 
-  constructor(private fb: FormBuilder, private employeeService: EmployeeService) { 
+  constructor(
+    private fb: FormBuilder, 
+    private employeeService: EmployeeService,
+    private dialogRef: MatDialogRef<AddEmployeeComponent>) { 
     
    }
 
@@ -20,7 +25,7 @@ export class AddEmployeeComponent implements OnInit {
     this.employeeForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      mobile: ['', [Validators.required, Validators.pattern(/^01[0-2]\d{8}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^01[0-2]\d{8}$/)]],
       address: ['', Validators.required]
     });
   }
@@ -30,15 +35,14 @@ export class AddEmployeeComponent implements OnInit {
       this.isSaving = true;
       const employeeData = this.employeeForm.value;
 
-      // Call your service to save data
       this.employeeService.addEmployee(employeeData).subscribe({
         next: () => {
           this.isSaving = false;
-          // Close the popup and refresh the grid
+        this.employeeForm.reset();
+        this.dialogRef.close('saved');
         },
         error: () => {
           this.isSaving = false;
-          // Handle error
         }
       });
     }
@@ -47,4 +51,7 @@ export class AddEmployeeComponent implements OnInit {
     return this.employeeForm.controls;
   }
 
+  close() {
+    this.dialogRef.close();
+  }
 }

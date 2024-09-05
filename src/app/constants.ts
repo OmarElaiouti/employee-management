@@ -1,7 +1,9 @@
+import { environment } from "./environments/environment";
+
 export const API_ENDPOINTS = {
-    GET_EMPLOYEES: '/api/employees',
-    ADD_EMPLOYEE: '/api/employees/add',
-    EDIT_EMPLOYEE: '/api/employees/edit',
-    DELETE_EMPLOYEE: '/api/employees/delete',
-    DELETE_EMPLOYEES: '/api/employees/delete'
+    CRUD_EMPLOYEES: `${environment.apiUrl}/api/employee`,
+    LOGIN: `${environment.apiUrl}/auth/login`,
+    REFRESH_TOKEN: `${environment.apiUrl}/auth/refresh-token`
+
+
   };

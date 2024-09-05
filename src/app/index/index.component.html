@@ -1,1 +1,57 @@
-<p>index works!</p>
+<div class="container">
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-sm-6">
+          <h2>Manage <b>Employees</b></h2>
+        </div>
+        <div class="col-sm-6">
+          <button class="btn btn-success" (click)="openAddEmployeeModal()"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
+          <button class="btn btn-danger" (click)="openConfirmBulkDeleteDialog()" ><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
+          <button class="btn btn-warning" (click)="logout()"><i class="material-icons">&#xE879;</i> <span>Logout</span></button>
+
+        </div>
+      </div>
+    </div>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>
+            <span class="custom-checkbox">
+              <input type="checkbox" id="selectAll" (change)="selectAll($event)" 
+              [checked]="isAllSelected()">
+              <label for="selectAll"></label>
+            </span>
+          </th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td>
+            <span class="custom-checkbox">
+              <input type="checkbox" (change)="toggleSelection(employee.id)" 
+              [checked]="isSelected(employee.id)">
+              <label></label>
+            </span>
+          </td>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.address }}</td>
+          <td>{{ employee.phone }}</td>
+          <td>
+            <a (click)="openEditEmployeeModal(employee)" class="edit"><i class="material-icons " title="Edit">&#xE254;</i></a>
+            <a (click)="openConfirmDeleteDialog(employee)" class="delete"><i class="material-icons" title="Delete">&#xE872;</i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="clearfix">
+      <div class="hint-text">Showing <b>{{ employees.length }}</b> out of <b>{{ totalEmployees }}</b> entries</div>
+    </div>
+  </div>
+</div>
