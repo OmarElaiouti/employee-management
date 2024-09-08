@@ -7,7 +7,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, Observable, switchMap, throwError } from 'rxjs';
-import { AuthService } from '../services/auth-services/auth.service';
+import { AuthService } from '../../services/auth-services/auth.service';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -67,6 +67,7 @@ export class TokenInterceptor implements HttpInterceptor {
       switchMap((newToken: string) => {
         this.authService.saveNewAccessToken(newToken);
         this.refreshTokenSubject.next(newToken);
+        console.log('New token emitted:', newToken);
         this.isRefreshing = false;
 
         const authReq = req.clone({

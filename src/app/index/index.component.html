@@ -7,7 +7,8 @@
         </div>
         <div class="col-sm-6">
           <button class="btn btn-success" (click)="openAddEmployeeModal()"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
-          <button class="btn btn-danger" (click)="openConfirmBulkDeleteDialog()" [disabled]="selectedEmployeeIds.length === 0"><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
+          <button class="btn btn-danger" (click)="openConfirmBulkDeleteDialog()" *ngIf="selectedEmployeeIds.length !== 0" ><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
+          <button class="btn btn-danger" *ngIf="selectedEmployeeIds.length === 0" disabled><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
           <button class="btn btn-warning" (click)="logout()"><i class="material-icons">&#xE879;</i> <span>Logout</span></button>
 
         </div>
@@ -17,11 +18,17 @@
       <thead>
         <tr>
           <th>
-            <span class="custom-checkbox">
-              <input type="checkbox" id="selectAll" [disabled]="dataSource.data.length === 0" (change)="selectAll($event)" 
+            <span class="custom-checkbox" *ngIf="dataSource.data.length !== 0" >
+              <input  type="checkbox" id="selectAll"  (change)="selectAll($event)" 
               [checked]="isAllSelected() ">
               <label for="selectAll"></label>
             </span>
+            <span class="custom-checkbox" *ngIf="dataSource.data.length == 0" >
+              <input type="checkbox"  id="disabledSelectAll" disabled>
+              <label for="disabledSelectAll"></label>
+            </span>
+            
+       
           </th>
           <th>Name</th>
           <th>Email</th>
@@ -56,7 +63,7 @@
     <mat-paginator
     [pageSizeOptions]="[5,10, 20, 50]"
     [length]="totalEmployees"
-    (page)="onPageChange($event)">
+   >
   </mat-paginator>
   </div>
 </div>

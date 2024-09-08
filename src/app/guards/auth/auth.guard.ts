@@ -19,13 +19,5 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  canNotActivate(): boolean {
-    const isLoggedIn = !!sessionStorage.getItem('accessToken');
-    if (isLoggedIn) {
-      this.router.navigate(['/management']);
-      return false;
-    } else {
-      return true;
-    }
-  }
+  
 }

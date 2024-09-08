@@ -51,19 +51,8 @@ export class IndexComponent {
       error: (err) => console.log('Error fetching employees')
     });
   }
-  onPageChange(event: any): void {
-    const pageIndex = event.pageIndex + 1; 
-    const pageSize = event.pageSize;
-  
-    this.employeeService.getEmployees(pageIndex, pageSize).subscribe({
-      next: (data: any) => {
-        this.dataSource.data = data.items;
-        this.totalEmployees = data.totalCount;
 
-      },
-      error: (err) => console.log('Error fetching employees')
-    });
-  }
+ 
 
   openAddEmployeeModal(): void {
     const modalRef = this.dialog.open(AddEmployeeComponent, {
@@ -165,6 +154,10 @@ export class IndexComponent {
 
   isSelected(employeeId: string): boolean {
     return this.selectedEmployeeIds.includes(employeeId);
+  }
+
+  anyValidEmployee(): boolean {
+    return this.dataSource.data.length > 0;
   }
 
   isAllSelected(): boolean {
