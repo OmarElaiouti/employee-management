@@ -8,7 +8,7 @@
             <input id="email" formControlName="email" type="email" class="form-control" placeholder="Enter your email">
             <div *ngIf="f['email'].touched && f['email'].invalid" class="text-danger">
               <small *ngIf="f['email'].errors?.['required']">Email is required.</small>
-              <small *ngIf="f['email'].errors?.['email']">Invalid email format.</small>
+              <small *ngIf="f['email'].errors?.['pattern']">Invalid email format.</small>
             </div>
           </div>
   

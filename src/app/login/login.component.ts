@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth-services/auth.service';
 import { Router } from '@angular/router';
+import { PATTERNS } from '../constants';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(PATTERNS.EMAIL)]],
       password: ['', [Validators.required]]
     });
   }
@@ -32,10 +33,12 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
 
     this.isSubmitting = true;
+    this.errorMessage = null;
     const loginData = this.loginForm.value;
 
     this.authService.login(loginData).subscribe({
