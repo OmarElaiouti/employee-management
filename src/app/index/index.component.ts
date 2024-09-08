@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IEmployee } from '../models/employee.model';
 import { EmployeeService } from '../services/employee-service/employee.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-index',
@@ -15,9 +17,12 @@ import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-d
   styleUrls: ['./index.component.css']
 })
 export class IndexComponent {
-  employees: IEmployee[] = [];
-  selectedEmployeeIds: string [] = [];
+  dataSource = new MatTableDataSource<IEmployee>();
   totalEmployees = 0;
+  selectedEmployeeIds: string[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
 
   constructor(
     private employeeService: EmployeeService,
@@ -26,18 +31,37 @@ export class IndexComponent {
     private router: Router
   ) {}
   
-  ngOnInit(): void {
-    this.loadEmployees();
+
+
+  ngAfterViewInit() {
+    this.loadEmployees()
+    this.paginator.page.subscribe(() => this.loadEmployees());
   }
 
   loadEmployees(): void {
-    this.employeeService.getEmployees().subscribe({
-      next: (employees) => {
-        this.employees = employees;
-        this.totalEmployees = employees.length;
-        
+    const pageIndex = this.paginator.pageIndex + 1;
+    const pageSize = this.paginator.pageSize;
+
+    this.employeeService.getEmployees(pageIndex, pageSize).subscribe({
+      next: (data: any) => {
+        this.dataSource.data = data.items;
+        this.totalEmployees = data.totalCount;
+        this.paginator.length = this.totalEmployees;
       },
-      error: (err) => console.error('Error fetching employees:', err)
+      error: (err) => console.log('Error fetching employees')
+    });
+  }
+  onPageChange(event: any): void {
+    const pageIndex = event.pageIndex + 1; 
+    const pageSize = event.pageSize;
+  
+    this.employeeService.getEmployees(pageIndex, pageSize).subscribe({
+      next: (data: any) => {
+        this.dataSource.data = data.items;
+        this.totalEmployees = data.totalCount;
+
+      },
+      error: (err) => console.log('Error fetching employees')
     });
   }
 
@@ -46,7 +70,6 @@ export class IndexComponent {
       width: '400px', 
       disableClose: false,  
       hasBackdrop: true,  
-      panelClass: 'custom-dialog-container'  
     });
 
     modalRef.afterClosed().subscribe(result => {
@@ -54,7 +77,7 @@ export class IndexComponent {
         this.loadEmployees();
       }
     }, error => {
-      console.error('Modal dismissed:', error);
+      console.log('Modal dismissed');
     });
   }
 
@@ -72,7 +95,7 @@ export class IndexComponent {
         this.loadEmployees();
       }
     }, error => {
-      console.error('Modal dismissed:', error);
+      console.log('Modal dismissed');
     });
   }
 
@@ -107,7 +130,7 @@ export class IndexComponent {
       next: () => {
         this.loadEmployees(); 
       },
-      error: (err) => console.error('Error deleting employee:', err)
+      error: (err) => console.log('Error deleting employee')
     });
   }
 
@@ -118,15 +141,15 @@ export class IndexComponent {
         this.loadEmployees();
         this.selectedEmployeeIds = []; 
       },
-      error: (err) => console.error('Error deleting employees:', err)
+      error: (err) => console.log('Error deleting employees')
     });
   }
 
   selectAll(event: any): void {
     const checked = event.target.checked;
-  
+
     if (checked) {
-      this.selectedEmployeeIds = this.employees.map(emp => emp.id);
+      this.selectedEmployeeIds = this.dataSource.data.map(emp => emp.id);
     } else {
       this.selectedEmployeeIds = [];
     }
@@ -145,7 +168,7 @@ export class IndexComponent {
   }
 
   isAllSelected(): boolean {
-    return this.selectedEmployeeIds.length === this.employees.length && this.employees.length > 0;
+    return this.selectedEmployeeIds.length === this.dataSource.data.length && this.dataSource.data.length > 0;
   }
 
   logout() {

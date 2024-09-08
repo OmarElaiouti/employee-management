@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        debugger;
         this.authService.saveTokens(response);  
         this.router.navigate(['/management']);  
       },

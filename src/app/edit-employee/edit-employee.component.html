@@ -1,4 +1,5 @@
-<h2>Edit Employee</h2>
+<h2 mat-dialog-title>Edit Employee</h2>
+<mat-dialog-content>
 <form [formGroup]="employeeForm" (ngSubmit)="updateEmployee()">
   <div class="form-group">
     <label for="name">Name:</label>
@@ -39,3 +40,4 @@
     <button type="submit" (click)="updateEmployee()" class="btn btn-success" [disabled]="employeeForm.invalid || isSaving">Save</button>
   </div>
 </form>
+</mat-dialog-content>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from 'src/app/constants';
@@ -15,8 +15,9 @@ export class AuthService {
     return this.http.post<ILoginResult>(API_ENDPOINTS.LOGIN, model);
   }
 
-  refreshToken(refreshToken: string): Observable<string> {
-    return this.http.post<string>(API_ENDPOINTS.REFRESH_TOKEN, { refreshToken: this.refreshToken });
+  refreshToken(token: string): Observable<string> {
+    const params = new HttpParams().set('refreshToken', token);
+    return this.http.get<string>(API_ENDPOINTS.REFRESH_TOKEN, { params, responseType: 'text' as 'json' });
   }
 
   saveTokens(result: ILoginResult): void {

@@ -13,10 +13,10 @@ export class EmployeeService {
   
   constructor(private http: HttpClient) {}
 
-  getEmployees(): Observable<IEmployee[]> {
-    return this.http.get<IEmployee[]>(API_ENDPOINTS.CRUD_EMPLOYEES);
+  getEmployees(page: number, pageSize: number): Observable<any> {
+    return this.http.get<any>(`${API_ENDPOINTS.CRUD_EMPLOYEES}?page=${page}&pageSize=${pageSize}`);
   }
-
+  
   getEmployee(id: number): Observable<IEmployee> {
     return this.http.get<IEmployee>(`${API_ENDPOINTS.CRUD_EMPLOYEES}/${id}`);
   }

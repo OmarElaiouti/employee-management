@@ -41,7 +41,7 @@ export class EditEmployeeComponent {
           this.dialogRef.close('saved');
         },
         error: (err) => {
-          console.log('Error updating employee:', err);
+          console.log('Error updating employee:');
         },
         complete: () => {
           this.isSaving = false;
@@ -49,7 +49,6 @@ export class EditEmployeeComponent {
       });
     }
     else{
-      console.log("Hello");
       
     }
   }

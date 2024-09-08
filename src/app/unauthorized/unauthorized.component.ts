@@ -10,7 +10,6 @@ export class UnauthorizedComponent {
   constructor(private router:Router){}
 
 goToLogin() {
-  debugger;
 this.router.navigate(['/']);
 }
 

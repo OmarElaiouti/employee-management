@@ -7,7 +7,7 @@
         </div>
         <div class="col-sm-6">
           <button class="btn btn-success" (click)="openAddEmployeeModal()"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></button>
-          <button class="btn btn-danger" (click)="openConfirmBulkDeleteDialog()" ><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
+          <button class="btn btn-danger" (click)="openConfirmBulkDeleteDialog()" [disabled]="selectedEmployeeIds.length === 0"><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
           <button class="btn btn-warning" (click)="logout()"><i class="material-icons">&#xE879;</i> <span>Logout</span></button>
 
         </div>
@@ -18,8 +18,8 @@
         <tr>
           <th>
             <span class="custom-checkbox">
-              <input type="checkbox" id="selectAll" (change)="selectAll($event)" 
-              [checked]="isAllSelected()">
+              <input type="checkbox" id="selectAll" [disabled]="dataSource.data.length === 0" (change)="selectAll($event)" 
+              [checked]="isAllSelected() ">
               <label for="selectAll"></label>
             </span>
           </th>
@@ -31,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let employee of employees">
+        <tr *ngFor="let employee of dataSource.data">
           <td>
             <span class="custom-checkbox">
               <input type="checkbox" (change)="toggleSelection(employee.id)" 
@@ -51,7 +51,12 @@
       </tbody>
     </table>
     <div class="clearfix">
-      <div class="hint-text">Showing <b>{{ employees.length }}</b> out of <b>{{ totalEmployees }}</b> entries</div>
+      <div class="hint-text">Showing <b>{{ dataSource.data.length }}</b> out of <b>{{ totalEmployees }}</b> entries</div>
     </div>
+    <mat-paginator
+    [pageSizeOptions]="[5,10, 20, 50]"
+    [length]="totalEmployees"
+    (page)="onPageChange($event)">
+  </mat-paginator>
   </div>
 </div>

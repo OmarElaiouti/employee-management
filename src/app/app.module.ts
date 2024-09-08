@@ -14,6 +14,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog'; 
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component'; 
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,10 @@ import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-de
     HttpClientModule,
     BrowserAnimationsModule, 
     MatDialogModule,         
-    MatButtonModule     
+    MatButtonModule,
+    MatPaginatorModule,
+    MatTableModule,
+     
   ],
   providers: [
     {
